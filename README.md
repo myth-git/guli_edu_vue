@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # vue-admin-template
 
 > A minimal vue admin template with Element UI & axios & iconfont & permission control & lint
@@ -90,3 +91,6 @@ Copyright (c) 2017-present PanJiaChen
 =======
 # guli_edu_vue
 >>>>>>> fcfbd6aa2392f0f5ad22d1374d38c4768273f939
+=======
+# guli_edu_vue
+>>>>>>> b50b8dbaaf1620c3428cac9ac4cfcc3c90383f49
