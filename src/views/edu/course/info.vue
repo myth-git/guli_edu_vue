@@ -21,6 +21,19 @@
         />
       </el-form-item>
 
+      <!-- 课程讲师 TODO -->
+      <!-- 课程讲师 -->
+      <el-form-item label="课程讲师">
+        <el-select v-model="courseInfo.teacherId" placeholder="请选择">
+          <el-option
+            v-for="teacher in teacherList"
+            :key="teacher.id"
+            :label="teacher.name"
+            :value="teacher.id"
+          />
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="总课时">
         <el-input-number
           :min="0"
@@ -70,11 +83,20 @@ export default {
         cover: "",
         price: 0,
       },
+      teacherList: [], //封装所有的讲师
     };
   },
 
-  created() {},
+  created() {
+    //初始化所有讲师
+    this.getListTeacher();
+  },
   methods: {
+    getListTeacher() {
+      course.getListTeacher().then((response) => {
+        this.teacherList = response.data.items;
+      });
+    },
     saceOrUpdate() {
       course.addCourseInfo(this.courseInfo).then((response) => {
         //提示
