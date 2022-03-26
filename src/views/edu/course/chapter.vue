@@ -67,7 +67,7 @@ export default {
     },
     previous() {
       //跳转到第二步
-      this.$router.push({ path: "/course/info/1" });
+      this.$router.push({ path: "/course/info/" + this.courseId });
     },
     next() {
       //跳转到第二步
