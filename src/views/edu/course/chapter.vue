@@ -13,11 +13,21 @@
       <el-step title="最终发布" />
     </el-steps>
 
+    <el-button type="text" @click="openChapterDialog()">添加章节</el-button>
+
     <!-- 章节 -->
     <ul class="chanpterList">
       <li v-for="chapter in chapterVideoList" :key="chapter.id">
         <p>
           {{ chapter.title }}
+          <span class="acts">
+            <el-button style="" type="text" @click="openEditChatper(chapter.id)"
+              >编辑</el-button
+            >
+            <el-button type="text" @click="removeChapter(chapter.id)"
+              >删除</el-button
+            >
+          </span>
         </p>
 
         <!-- 视频 -->
@@ -31,12 +41,34 @@
 
     <el-form label-width="120px">
       <el-form-item>
-        <el-button @click="previous">上一步</el-button>
-        <el-button :disabled="saveBtnDisabled" type="primary" @click="next"
-          >下一步</el-button
-        >
+        <div>
+          <el-button @click="previous">上一步</el-button>
+          <el-button :disabled="saveBtnDisabled" type="primary" @click="next"
+            >下一步</el-button
+          >
+        </div>
       </el-form-item>
     </el-form>
+
+    <!-- 添加和修改章节表单 -->
+    <el-dialog :visible.sync="dialogChapterFormVisible" title="添加章节">
+      <el-form :model="chapter" label-width="120px">
+        <el-form-item label="章节标题">
+          <el-input v-model="chapter.title" />
+        </el-form-item>
+        <el-form-item label="章节排序">
+          <el-input-number
+            v-model="chapter.sort"
+            :min="0"
+            controls-position="right"
+          />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogChapterFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveOrUpdate()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -47,6 +79,12 @@ export default {
       saveBtnDisabled: false,
       chapterVideoList: [],
       courseId: "",
+      chapter: {
+        //封装章节数据
+        title: "",
+        sort: 0,
+      },
+      dialogChapterFormVisible: false, //章节弹框
     };
   },
 
@@ -59,6 +97,59 @@ export default {
     }
   },
   methods: {
+    openEditChatper(chapterId) {
+      //开启弹窗
+      this.dialogChapterFormVisible = true;
+      chapter.getChapter(chapterId).then((response) => {
+        this.chapter = response.data.chapter;
+      });
+    },
+    //弹出添加章节页面
+    openChapterDialog() {
+      //开启弹窗
+      this.dialogChapterFormVisible = true;
+      //表单数据清空
+      (this.chapter.title = ""), (this.chapter.sort = 0);
+    },
+    //添加小节
+    addChapter() {
+      //设置课程id
+      this.chapter.courseId = this.courseId;
+      chapter.addChapter(this.chapter).then((response) => {
+        //关闭弹窗
+        this.dialogChapterFormVisible = false;
+        //提示成功
+        //提示
+        this.$message({
+          type: "success",
+          message: "添加章节成功!",
+        });
+        //刷新数据
+        this.getChapterVido();
+      });
+    },
+    //修改章节
+    updateChapter() {
+      chapter.updateChapter(this.chapter).then((response) => {
+        //关闭弹窗
+        this.dialogChapterFormVisible = false;
+        //提示成功
+        //提示
+        this.$message({
+          type: "success",
+          message: "修改章节成功!",
+        });
+        //刷新数据
+        this.getChapterVido();
+      });
+    },
+    saveOrUpdate() {
+      if (!this.chapter.id) {
+        this.addChapter();
+      } else {
+        this.updateChapter();
+      }
+    },
     //根据课程id查询章节和小节
     getChapterVido() {
       chapter.getAllChapterVideo(this.courseId).then((response) => {
@@ -87,6 +178,7 @@ export default {
   position: relative;
 }
 .chanpterList p {
+  position: relative;
   float: left;
   font-size: 20px;
   margin: 10px 0;
@@ -97,6 +189,8 @@ export default {
   border: 1px solid #ddd;
 }
 .chanpterList .acts {
+  position: relative;
+  z-index: 1;
   float: right;
   font-size: 14px;
 }
