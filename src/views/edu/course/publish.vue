@@ -72,8 +72,15 @@ export default {
     },
 
     publish() {
-      console.log("publish");
-      this.$router.push({ path: "/course/list" });
+      course.publishCoure(this.courseId).then((response) => {
+        //提示
+        this.$message({
+          type: "success",
+          message: "课程发布成功!",
+        });
+        //跳转到课程列表页面
+        this.$router.push({ path: "/course/list" });
+      });
     },
   },
 };
