@@ -33,6 +33,14 @@ export default {
         })
     },
 
+    //课程信息确认
+    getPublishCoureInfo(id) {
+        return request({
+            url: '/eduservice/course/getPublishCourseInfo/' + id,
+            method: 'get'
+        })
+    }
+
 
 }
 
