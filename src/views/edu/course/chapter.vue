@@ -97,6 +97,29 @@ export default {
     }
   },
   methods: {
+    //删除章节
+    removeChapter(chapterId) {
+      this.$confirm("此操作将永久删除章节, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        //点击确定，执行then方法
+        //调用删除的方法
+        chapter.deleteChapter(chapterId).then((response) => {
+          //删除成功
+          //提示信息
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+          //刷新数据
+          this.getChapterVido();
+        });
+      }); //点击取消，执行catch方法
+    },
+
+    //修改章节弹框数据回显
     openEditChatper(chapterId) {
       //开启弹窗
       this.dialogChapterFormVisible = true;
@@ -111,7 +134,7 @@ export default {
       //表单数据清空
       (this.chapter.title = ""), (this.chapter.sort = 0);
     },
-    //添加小节
+    //添加章节
     addChapter() {
       //设置课程id
       this.chapter.courseId = this.courseId;
