@@ -204,6 +204,8 @@ export default {
     handleVodUploadSuccess(response, file, fileList) {
       //上传视频id赋值
       this.video.videoSourceId = response.data.videoId;
+      //上传视频名称
+      this.video.videoOriginalName = file.name;
     },
     handleUploadExceed() {
       this.$message.warning("想要重新上传视频，请先删除已上传的视频");
